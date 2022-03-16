@@ -15,6 +15,10 @@ public class Car {
 	}
 	
 	public void breakSpeed() {
+		if(this.speed - 10 < 0) {
+			System.out.println(" !!! ");
+			return;
+		}
 		System.out.print("끼이이이익!!! ");
 		this.speed -= 10;
 	}
