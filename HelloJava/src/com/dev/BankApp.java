@@ -60,13 +60,25 @@ public class BankApp {
 		int accMoney = scn.nextInt();
 		Account accnt = new Account(accNo, accName,accMoney);
 		
+		int checkCnt = 0;
+		int accIndex = 0;
 		for(int i = 0; i < banks.length; i++) {
-			if(banks[i] == null) {
-				banks[i] = accnt;
+			if(banks[i] == null && checkCnt == 0) {
+				accIndex = i;
+				checkCnt = 1;
+			} else if(banks[i] != null && banks[i].getAccNo().equals(accNo)) {
+				checkCnt = 2;
 				break;
 			}
 		}
-		System.out.println("계좌가 정상적으로 생성되었습니다.");
+		if(checkCnt == 1) {
+			banks[accIndex] = accnt;
+			System.out.println("계좌가 정상적으로 생성되었습니다.");
+		} else if(checkCnt == 2) {
+			System.out.println("이미 존재하는 계좌번호 입니다.");
+		} else {
+			System.out.println("계좌생성에 실패했습니다.");
+		}
 	}
 	// 예금 메소드
 	public static void deposit() {
@@ -101,11 +113,54 @@ public class BankApp {
 	}
 	// 출금 메소드.
 	public static void withdraw() {
-		System.out.println("출금기능.");
+		System.out.println("[출금기능]");
+		System.out.print("계좌번호>> ");
+		String ano = scn.next();
+		System.out.println("출금액 입력 >> "); 
+		int amt = scn.nextInt();
+		int checkCnt = 0; // 조회가 됐는지 체크 여부 변수.
+		for( int i = 0; i < banks.length; i++ ) {
+			if( banks[i] != null && banks[i].getAccNo().equals(ano) ) { // 계좌번호 있을 경우..
+				// 계좌번호 조회 됐을 때...
+				checkCnt = 1;
+				int currAmt = banks[i].getMoney();
+				
+				// 잔액이 0원보다 적을 경우
+				if(currAmt - amt < 0) {
+					checkCnt = 2;
+					break;
+				}
+				banks[i].setMoney(currAmt - amt); // 잔액 - 출금액
+				break;
+			}
+		}
+		if(checkCnt == 1) {			
+			System.out.println("정상적으로 처리되었습니다.");
+		} else if(checkCnt == 2) {
+			System.out.println("잔액이 모자랍니다.");
+		} else {
+			System.out.println("계좌번호가 없습니다.");
+		}
 	}
 	// 잔액조회 메소드.
 	public static void findAccountMoney() {
-		System.out.println("조회기능.");
+		System.out.println("[조회기능]");
+		System.out.print("계좌번호>> ");
+		String ano = scn.next();
+		int checkCnt = 0;
+		for(int i = 0; i < banks.length; i++) {
+			if( banks[i] != null && banks[i].getAccNo().equals(ano) ) {
+				checkCnt = 1;
+				System.out.println(banks[i].toString());
+				break;
+			}
+		}
+		
+		if(checkCnt == 0) {
+			System.out.println("계좌를 찾지 못했습니다.");
+		} else if(checkCnt == 1) {
+			
+		}
 	}
 	// 전체리스트 출력.
 	public static void showList() {
