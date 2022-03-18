@@ -7,7 +7,28 @@ public class Account {
 	private String accName;
 	private int money;
 	
+	public static String bankName;
+	static {
+		bankName = "한일은행";
+	}
+	public static void showBankName() {
+		System.out.println("한일은행~");
+	}
+	
+	
 	// constructor: 생성자의 목적
+	// constructor overloading...
+	public Account() {
+		System.out.println("기본 생성자 호출...");
+	}
+	public Account(String accNo, String accName) {
+		this.accNo = accNo;
+		this.accName = accName;
+	}
+	public Account(String accNo, int money) {
+		this.accNo = accNo;
+		this.money = money;
+	}
 	public Account(String accNo, String accName, int money) {
 		this.accNo = accNo;
 		this.accName = accName;
