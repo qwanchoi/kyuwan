@@ -11,9 +11,9 @@ public class StudentApp {
 
     // 생성자
     public StudentApp() {
-	list.add(new Student(101, "권가희", 50, 60));
-	list.add(new Student(102, "유해정", 70, 80));
-	list.add(new Student(103, "이유빈", 90, 70));
+//	list.add(new Student(101, "권가희", 50, 60));
+//	list.add(new Student(102, "유해정", 70, 80));
+//	list.add(new Student(103, "이유빈", 90, 70));
     }
 
     // 멤버 클래스
@@ -25,7 +25,7 @@ public class StudentApp {
 	}
 
 	@Override
-	public Student getStudet(int sno) { // 학생번호로 한건 조회.
+	public Student getStudent(int sno) { // 학생번호로 한건 조회.
 	    for (int i = 0; i < list.size(); i++) {
 		if (list.get(i).getNumber() == sno) {
 		    return list.get(i);
@@ -68,17 +68,21 @@ public class StudentApp {
 	    }
 	    return searchList;
 	}
+	
+	@Override
+	public void saveToFile() {
+	    System.exit(0);
+	}
 
     } // end of StudentServiceImpl
 
     public void execute() {
-	StudentService service = new StudentServiceImpl();
+	StudentService service = new StudentServiceFile();
 
 	// 메뉴: 1.추가 2.리스트 3.한건조회 4.수정 9.종료
 	while (true) {
 	    System.out.println("1.추가 2.리스트 3.한건조회 4.수정 5.한건삭제 6. 이름조회 9.종료");
 	    System.out.print("선택>> ");
-
 	    int menu = scn.nextInt();
 	    if (menu == 1) { // 추가
 		// 학생정보 추가입력. : 학생번호, 이름, 영어, 국어점수.
@@ -103,7 +107,7 @@ public class StudentApp {
 	    } else if (menu == 3) { // 한건조회
 		System.out.println("조회할 학생번호 입력>>");
 		int studNo = scn.nextInt();
-		Student student = service.getStudet(studNo);
+		Student student = service.getStudent(studNo);
 		if (student == null) {
 		    System.out.println("조회돤 결과가 없습니다.");
 		} else {
@@ -124,7 +128,7 @@ public class StudentApp {
 	    } else if (menu == 5) { // 삭제
 		System.out.println("삭제할 학생번호 입력>>");
 		int studNo = scn.nextInt();
-		Student student = service.getStudet(studNo);
+		Student student = service.getStudent(studNo);
 		if (student == null) {
 		    System.out.println("조회돤 결과가 없습니다.");
 		} else {
@@ -140,6 +144,7 @@ public class StudentApp {
 		}
 	    } else if (menu == 9) { // 종료
 		System.out.println("프로그램을 종료합니다.");
+		service.saveToFile();
 		break;
 	    } else {
 		// 잘못된 선택
