@@ -77,7 +77,8 @@ public class StudentApp {
     } // end of StudentServiceImpl
 
     public void execute() {
-	StudentService service = new StudentServiceFile();
+	StudentService	service = new StudentServiceImpl(); 
+			service = new StudentServiceFile();
 
 	// 메뉴: 1.추가 2.리스트 3.한건조회 4.수정 9.종료
 	while (true) {
