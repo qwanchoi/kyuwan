@@ -79,6 +79,7 @@ public class StudentApp {
     public void execute() {
 	StudentService	service = new StudentServiceImpl(); 
 			service = new StudentServiceFile();
+			service = new StudentServiceOracle();
 
 	// 메뉴: 1.추가 2.리스트 3.한건조회 4.수정 9.종료
 	while (true) {
@@ -101,8 +102,10 @@ public class StudentApp {
 
 	    } else if (menu == 2) { // 리스트
 		List<Student> list = service.studentList();
+		System.out.println("========== 학생리스트 ==========");
 		for (Student s : list) {
-		    System.out.println(s.toString());
+//		    System.out.println(s.toString());
+		    System.out.printf(s.showList(), s.getNumber(), s.getName(), s.getEngScore(), s.getKorScore());
 		}
 
 	    } else if (menu == 3) { // 한건조회

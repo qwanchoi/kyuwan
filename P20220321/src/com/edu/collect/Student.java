@@ -56,4 +56,8 @@ public class Student implements Serializable {
 		+ "]";
     }
     
+    public String showList() {
+	return "학생번호: %5d 학생이름: %-5s 영어: %5d 국어: %5d \n";
+    }
+    
 }

@@ -45,7 +45,7 @@ public class EmpDAO extends DAO {
 	    psmt.setInt(1, empNumber);
 
 	    rs = psmt.executeQuery();
-	    while (rs.next()) {
+	    if (rs.next()) { // 쿼리 결과값이 없을 경우 false
 		emp = new Employee();
 		emp.setEmployeeId(rs.getInt("employee_id")); // employees.employee_id
 		emp.setFirstName(rs.getString("first_name"));
@@ -54,6 +54,7 @@ public class EmpDAO extends DAO {
 		emp.setSalary(rs.getInt("salary"));
 		emp.setHireDate(rs.getString("hire_date").substring(0, 10));
 		emp.setJobId(rs.getString("job_id"));
+		emp.setPhoneNumber(rs.getString("phone_number"));
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();
@@ -64,7 +65,7 @@ public class EmpDAO extends DAO {
     }
 
     // 입력처리 executeUpdate()
-    public void insertEmp(Employee emp) {
+    public boolean insertEmp(Employee emp) {
 	conn = getConnect();
 	String sql = "insert into emp_java " + "(employee_id, last_name, email, hire_date, job_id)"
 		+ "values(?, ?, ?, ?, ?)";
@@ -77,17 +78,21 @@ public class EmpDAO extends DAO {
 	    psmt.setString(5, emp.getJobId());
 	    int r = psmt.executeUpdate(); // 실행된 건수 반환.
 	    System.out.println(r + "건 입력됨.");
+	    if(r > 0) {
+		return true;
+	    }
 
 	} catch (SQLException e) {
-	    e.printStackTrace();
+//	    e.printStackTrace();
 	} finally {
 	    // 정상실행, 예외발생 => 반드시 실행코드.
 	    disconnect();
 	}
+	return false;
     } // end of update
 
     // 수정처리
-    public void updateEmp(Employee emp) {
+    public boolean updateEmp(Employee emp) {
 	conn = getConnect();
 	String sql = "update emp_java " + "set first_name = ?, " + "phone_number=?, " + "salary = ? "
 		+ "where employee_id = ?";
@@ -101,11 +106,13 @@ public class EmpDAO extends DAO {
 
 	    int r = psmt.executeUpdate();
 	    System.out.println(r + "건 수정됨.");
+	    if(r > 0) { return true; }
 	} catch (SQLException e) {
-	    e.printStackTrace();
+//	    e.printStackTrace();
 	} finally {
 	    disconnect();
 	}
+	return false;
 
     } // end of update
 

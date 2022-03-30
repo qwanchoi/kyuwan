@@ -5,4 +5,5 @@ public class StudentExe {
 	StudentApp app = new StudentApp(); // 인스턴스 생성.
 	app.execute();
     }
+    
 }

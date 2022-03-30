@@ -48,7 +48,12 @@ public class EmpExe {
 		    scn.next();
 		    continue;
 		}
-		dao.insertEmp(emp);
+		boolean tOrF = dao.insertEmp(emp); // boolean 타입으로 결과값을 받음
+		if(tOrF) {
+		    System.out.println("사원입력 정상");
+		} else {
+		    System.out.println("!! 사원입력 오류 !!");
+		}
 	    } else if(menu == 3) { // 수정
 		// 사원번호, 전화번호, firstName, salary
 		
@@ -68,13 +73,22 @@ public class EmpExe {
 		    System.out.print("급여 >>");
 //		    emp.setSalary(scn.nextInt());
 		    int salary = scn.nextInt();
+		    
+		    if ( dao.searchEmp(empNo) == null ) {
+			System.out.println("!!! 없는 사원번호!!!");
+			continue;
+		    }
 		    emp = new Employee(empNo, phoneNum, firstName, salary);
 		} catch (InputMismatchException e) {
 		    System.out.println("!!!잘못된 입력!!!");
 		    scn.next();
 		    continue;
 		}
-		dao.updateEmp(emp);
+		if ( dao.updateEmp(emp) ) {
+		    System.out.println("정상적으로 처리.");
+		} else {
+		    System.out.println("정상처리 안됐습니다.");
+		}
 	    } else if(menu == 4) { // 삭제
 		// 삭제할 사원번호
 		try {
@@ -88,16 +102,16 @@ public class EmpExe {
 		}
 	    } else if(menu == 5) { // 조회
 		//
-		Employee emp;
+		Employee emp = null;
 		try {
 		    System.out.print("조회할 사원번호 >>");
 		    int empNum = scn.nextInt();
 		    emp = dao.searchEmp(empNum);
-		    if (emp != null) {			
+		    if (emp != null) 		
 			System.out.println(emp.toString());
-		    } else {
+		    else 
 			System.out.println("!!!없는 사원 번호!!!");
-		    }
+		    
 		}  catch (InputMismatchException e) {
 		    System.out.println("!!!잘못된 입력!!!");
 		    scn.next();
