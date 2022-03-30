@@ -6,9 +6,28 @@ public class Employee {
     private String firstName; // employees.first_name
     private String lastName; // employees.last_name
     private String email;
+    private String phoneNumber;
     private int salary;
     private String hireDate;
     private String jobId;
+    
+    public Employee() {
+    }
+    
+    public Employee(int employeeId, String lastName, String email, String hireDate, String jobId) {
+	this.employeeId = employeeId;
+	this.lastName = lastName;
+	this.email = email;
+	this.hireDate = hireDate;
+	this.jobId = jobId;
+    }
+    
+    public Employee(int employeeId, String phoneNumber, String firstName, int salary ) {
+	this.employeeId = employeeId;
+	this.phoneNumber = phoneNumber;
+	this.firstName = firstName;
+	this.salary = salary;
+    }
     
     public int getEmployeeId() {
         return employeeId;
@@ -52,12 +71,17 @@ public class Employee {
     public void setJobId(String jobId) {
         this.jobId = jobId;
     }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     
     @Override
     public String toString() {
 	return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
 		+ email + ", salary=" + salary + ", hireDate=" + hireDate + ", jobId=" + jobId + "]";
     }
-    
     
 }
