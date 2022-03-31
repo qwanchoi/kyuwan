@@ -10,7 +10,9 @@ public class DateExample {
 	today.setYear(2020 - 1900);
 	System.out.println(today);
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년MM월dd일 hh시mm분ss초");
+	SimpleDateFormat sdf = null; 
+	sdf = new SimpleDateFormat("yyyy년MM월dd일 hh시mm분ss초");
+	sdf = new SimpleDateFormat("yy-MM-dd");
 	System.out.println(sdf.format(today));
 	
 	LocalDateTime time = LocalDateTime.now();

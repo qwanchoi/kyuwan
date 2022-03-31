@@ -81,7 +81,7 @@ public class StudentServiceOracle extends DAO implements StudentService{
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();
-	    System.out.println("!!수정 실패!!");
+	    System.out.println("!!목록 보기 실패!!");
 	} finally {
 	    disconnect();
 	}
