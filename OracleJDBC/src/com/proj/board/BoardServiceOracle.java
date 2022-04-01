@@ -33,6 +33,8 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	    if ( r > 0 ) return true;
 	} catch (SQLException e) {
 	    e.printStackTrace();
+	    System.out.println(board);
+	    System.out.println(sql);
 	    System.out.println("!!! 입력 실패 !!!");
 	} finally {
 	    disconnect();
@@ -71,7 +73,9 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	List<Board> list = new ArrayList<Board>();
 	conn = getConnect();
 	String sql = "SELECT * FROM board_table "
-		+ "ORDER BY b_no DESC";
+		+ "WHERE b_parent IS NULL "
+		+ "OR b_parent < 1 "
+		+ "ORDER BY b_no DESC ";
 	
 	try {
 	    psmt = conn.prepareStatement(sql);
@@ -83,6 +87,7 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();
+	    System.out.println(sql);
 	    System.out.println("!!게시판 목록 불러오기 실패!!");
 	} finally {
 	    disconnect();
@@ -125,17 +130,17 @@ public class BoardServiceOracle extends DAO implements BoardService {
     public List<Board> getChildBoard(int parentNo) {
 	List<Board> list = new ArrayList<Board>();
 	conn = getConnect();
-	String sql = "SELECT * FROM board_table"
+	String sql = "SELECT * FROM board_table "
 		+ "WHERE b_parent = ? "
-		+ "ORDER BY DESC ";
-	
+		+ "ORDER BY b_no DESC";
 	try {
 	    psmt = conn.prepareStatement(sql);
+	    psmt.setInt(1, parentNo);
+	    
 	    rs = psmt.executeQuery();
 	    while(rs.next()) {
 		Board board = new Board();
 		this.rsToBoard(rs, board);
-		
 		list.add(board);
 	    }
 	} catch (SQLException e) {
@@ -143,7 +148,6 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	} finally {
 	    disconnect();
 	}
-	
 	return list;
     }
 
@@ -176,6 +180,50 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	psmt.setInt(8, board.getLike());
 	psmt.setInt(9, board.getParent());
 	psmt.setInt(10, board.getHit());
+    }
+
+    @Override
+    public int getLastBoardNumber() {
+	conn = getConnect();
+	int number = 0;
+	
+	String sql = "SELECT MAX(b_no) FROM board_table";
+	try {
+	    psmt = conn.prepareStatement(sql);
+	    
+	    rs = psmt.executeQuery();
+	    if(rs.next()) {
+		number = rs.getInt("MAX(b_no)");
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	} finally {
+	    disconnect();
+	}
+	
+	return number;
+    }
+
+    @Override
+    public int boardLength() {
+	conn = getConnect();
+	int number = 0;
+	
+	String sql = "SELECT COUNT(b_no) FROM board_table";
+	try {
+	    psmt = conn.prepareStatement(sql);
+	    
+	    rs = psmt.executeQuery();
+	    if(rs.next()) {
+		number = rs.getInt("MAX(b_no)");
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	} finally {
+	    disconnect();
+	}
+	
+	return number;
     }
 
 }

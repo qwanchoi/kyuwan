@@ -82,8 +82,14 @@ public class Board {
     
     public String showList() {
 	String str = "";
-	// |no| title | writer | mod_date | like | hit |
-	str = "||%5d|		%s		|	%s	|	%s	| %4s | %10s ||";
+	str = "||%7d" // no
+		+ "|| %s " // title
+		+ "|| %s " // writer
+		+ "||%s" // date
+		+ "||%10d" // like
+		+ "||%10d" // hit
+		+ "||%7d" // comments
+		+ "||\n";
 	return str;
     }
     
