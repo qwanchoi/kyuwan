@@ -82,13 +82,13 @@ public class Board {
     
     public String showList() {
 	String str = "";
-	str = "||%7d" // no
+	str = "|| %5d " // no
 		+ "|| %s " // title
 		+ "|| %s " // writer
 		+ "||%s" // date
-		+ "||%10d" // like
-		+ "||%10d" // hit
-		+ "||%7d" // comments
+		+ "|| %8d " // like
+		+ "|| %8d " // hit
+		+ "|| %5d " // comments
 		+ "||\n";
 	return str;
     }

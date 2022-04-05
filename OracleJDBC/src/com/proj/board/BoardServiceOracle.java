@@ -104,7 +104,21 @@ public class BoardServiceOracle extends DAO implements BoardService {
 
     @Override
     public boolean removeBoard(int bno) {
-	// TODO Auto-generated method stub
+    	conn = getConnect();
+    	String sql = "DELETE FROM board_table "
+    			+ "WHERE b_no = ?";
+    	try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, bno);
+			
+			int r = psmt.executeUpdate();
+			if( r > 0 ) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	return false;
     }
 
@@ -116,8 +130,26 @@ public class BoardServiceOracle extends DAO implements BoardService {
 
     @Override
     public boolean likeBoard(int bno) {
-	// TODO Auto-generated method stub
-	return false;
+    	Board board = this.getBoard(bno);
+    	
+    	conn = getConnect();
+    	String sql = "UPDATE board_table "
+    			+ "SET b_like = ? "
+    			+ "WHERE b_no = ? ";
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, board.getLike()+1);
+			psmt.setInt(2, board.getNo());
+			
+			int r = psmt.executeUpdate();
+			if(r > 0) { return true; }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		
+    	return false;
     }
 
     @Override
@@ -153,7 +185,26 @@ public class BoardServiceOracle extends DAO implements BoardService {
 
     @Override
     public boolean hitBoard(int bno) {
-	return false;
+    	Board board = this.getBoard(bno);
+    	
+    	conn = getConnect();
+    	String sql = "UPDATE board_table "
+    			+ "SET b_hit = ? "
+    			+ "WHERE b_no = ? ";
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, board.getHit()+1);
+			psmt.setInt(2, board.getNo());
+			
+			int r = psmt.executeUpdate();
+			if(r > 0) { return true; }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		
+    	return false;
     }
     
     private void rsToBoard(ResultSet rs, Board board) throws SQLException {
