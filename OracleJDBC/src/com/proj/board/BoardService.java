@@ -12,7 +12,6 @@ public interface BoardService {
     public List<Board> searchBoard(String keyword);
     
     public boolean likeBoard(int bno);
-    public boolean insertReplyBoard(Board board);
     public List<Board> getChildBoard(int parentNo);
     public boolean hitBoard(int bno);
     public int getLastBoardNumber();

@@ -42,7 +42,7 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	return false;
     }
 
-    @Override
+	@Override
     public Board getBoard(int bno) {
 	conn = getConnect();
 	Board board = null;
@@ -98,8 +98,24 @@ public class BoardServiceOracle extends DAO implements BoardService {
 
     @Override
     public boolean modifyBoard(Board board) {
-	// TODO Auto-generated method stub
-	return false;
+    	conn = this.getConnect();
+    	String sql = "UPDATE board_table "
+    			+ "SET b_title = ? "
+    			+ ", b_content = ? "
+    			+ "WHERE b_no = ? ";
+    	try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, board.getTitle());
+	    	psmt.setString(2, board.getContent());
+	    	psmt.setInt(3,  board.getNo());
+	    	int r = psmt.executeUpdate();
+	    	if( r > 0 ) { return true; }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+    	return false;
     }
 
     @Override
@@ -116,16 +132,42 @@ public class BoardServiceOracle extends DAO implements BoardService {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			disconnect();
 		}
-	return false;
+    	return false;
     }
 
     @Override
     public List<Board> searchBoard(String keyword) {
-	// TODO Auto-generated method stub
-	return null;
+    	List<Board> list = new ArrayList<Board>();
+    	conn = getConnect();
+    	String sql = "SELECT * FROM board_table "
+    		+ "WHERE (b_parent IS NULL "
+    		+ "OR b_parent < 1) "
+    		+ "AND b_title LIKE '%'||?||'%' "
+    		+ "ORDER BY b_no DESC ";
+    	
+    	try {
+    	    psmt = conn.prepareStatement(sql);
+    	    psmt.setString(1, keyword);
+    	    
+    	    rs = psmt.executeQuery();
+    	    while( rs.next() ) {
+	    		Board board = new Board();
+	    		this.rsToBoard(rs, board);
+	    		list.add(board);
+    	    }
+    	} catch (SQLException e) {
+    	    e.printStackTrace();
+    	    System.out.println(sql);
+    	    System.out.println("!!게시판 목록 불러오기 실패!!");
+    	} finally {
+    	    disconnect();
+    	}
+    	
+    	return list;
     }
 
     @Override
@@ -150,12 +192,6 @@ public class BoardServiceOracle extends DAO implements BoardService {
 		}
 		
     	return false;
-    }
-
-    @Override
-    public boolean insertReplyBoard(Board board) {
-	// TODO Auto-generated method stub
-	return false;
     }
 
     @Override

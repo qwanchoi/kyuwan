@@ -22,6 +22,7 @@ public class BoardApp {
 	Board curBoard = null;
 
 	public void execute() {
+		getAllBoardList();
 		showBoardList(currentPage, pageSize);
 	}
 
@@ -54,7 +55,7 @@ public class BoardApp {
 		} else {
 			System.out.println("게시 실패");
 		}
-		
+		getAllBoardList();
 		showBoardList(currentPage, pageSize);
 	} // end of insert
 	
@@ -87,9 +88,8 @@ public class BoardApp {
 		}
 		showBoard(curBoard.getNo());
 	} // end of comm insert
-
+	
 	private void showBoardList(int page, int size) {
-		list = service.boardList();
 		int start = (page - 1) * size;
 		int max = start + size;
 
@@ -120,7 +120,8 @@ public class BoardApp {
 	
 	private void showBoardPaging() {
 		int listSize = list.size();
-		int maxPage = listSize / this.pageSize + 1;
+		int maxPage = listSize / this.pageSize;
+		if(listSize % this.pageSize != 0) maxPage+=1;
 		String str = "| ";
 		for(int i = 1; i <= maxPage; i++) {
 			if(i == currentPage) {
@@ -134,22 +135,40 @@ public class BoardApp {
 		System.out.println(str);
 	}
 	
+	private void getAllBoardList() {
+		list = service.boardList();
+	}
+	
+	private void getSearchBoardList(String keyword) {
+		System.out.println("!!keyword?"+keyword);
+		list = service.searchBoard(keyword);
+	}
 
 	private void showBoardListMenu() {
 		System.out.println("* 게시물 번호 입력 | 글쓰기(w) |"
-				+ " 이전페이지(q) | 다음페이지(e) |"
+				+ " 이전페이지(q) | 다음페이지(e) | 전체리스트(a) | 제목 검색(s) |"
 				+ " 종료(z) ");
 		System.out.print(">>");
 		String menu = scn.next();
 		if (isNumeric(menu)) {
 			int bno = Integer.parseInt(menu);
 			showBoard(bno);
+		} else if (menu.equals("a") || menu.equals("A") || menu.equals("ㅁ")) {
+			getAllBoardList();
+			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("w") || menu.equals("W") || menu.equals("ㅈ") || menu.equals("ㅉ")) {
 			showBoardInsertForm();
 		} else if (menu.equals("q") || menu.equals("Q") || menu.equals("ㅂ") || menu.equals("ㅃ")) {
 			prevPaging();
 		} else if (menu.equals("e") || menu.equals("E") || menu.equals("ㄷ") || menu.equals("ㄸ")) {
 			nextPaging();
+		} else if (menu.equals("s") || menu.equals("S") || menu.equals("ㄴ")) {
+			System.out.print("검색어 >>");
+			scn.nextLine();
+			String keyword = scn.nextLine();
+			
+			getSearchBoardList(keyword);
+			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("z") || menu.equals("Z") || menu.equals("ㅋ")) {
 			System.out.println("프로그램 종료...");
 		} else {
@@ -183,9 +202,9 @@ public class BoardApp {
 		List<Board> comments = service.getChildBoard(board.getNo());
 		for(Board b : comments) {
 			str = "";
-			str += "   | -WRITER | "+boardFormmater(15, b.getWriter());
-			str += "   | -DATE | "+b.getDate().substring(0, 10);
-			str += "   | -COMMENT | "+b.getContent() + " |";
+			str += " | -WRITER | "+boardFormmater(15, b.getWriter());
+			str += " | -DATE | "+b.getDate().substring(0, 10);
+			str += " | -COMMENT | "+b.getContent() + " |";
 			System.out.println(str);
 		}
 		showBoardMenu();
@@ -205,6 +224,7 @@ public class BoardApp {
 		} else if (menu.equals("e") || menu.equals("E") || menu.equals("ㄷ") || menu.equals("ㄸ")) {
 			showBoardCommInsertForm();
 		} else if (menu.equals("l") || menu.equals("L") || menu.equals("ㅣ")) {
+			getAllBoardList();
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("d") || menu.equals("D") || menu.equals("ㅇ")) {
 			deleteBoard();
@@ -254,6 +274,7 @@ public class BoardApp {
 		if(checkBoardPassword(bno)) {
 			service.removeBoard(bno);
 			System.out.println("삭제 성공");
+			getAllBoardList();
 			showBoardList(currentPage, pageSize);
 		} else {
 			System.out.println("삭제 실패");
@@ -278,7 +299,9 @@ public class BoardApp {
 	
 	private void nextPaging() {
 		int listSize = list.size();
-		int maxPage = listSize / this.pageSize + 1;
+		int maxPage = listSize / this.pageSize;
+		if(listSize % this.pageSize != 0) maxPage++;
+		
 		if(currentPage < maxPage) {
 			currentPage++;
 		}
