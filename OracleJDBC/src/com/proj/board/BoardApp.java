@@ -96,7 +96,7 @@ public class BoardApp {
 		if (max > list.size())
 			max = list.size();
 
-		System.out.println("========== 게시물 리스트 ==========");
+		System.out.println("+ ========== ========== ========== ========== ========== +++ 게시판 +++ ========== ========== ========== ========== ========== +");
 		System.out.println("||    NO " // 7s
 				+ "||                     TITLE                     " // 45s
 				+ "||         WRITER       " // 20s
@@ -112,7 +112,9 @@ public class BoardApp {
 			System.out.printf(b.showList(), b.getNo(), boardFormmater(45, b.getTitle()),
 					boardFormmater(20, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
 		}
+		System.out.println("+ ========== ========== ========== ========== ========== +++  ++++++  +++ ========== ========== ========== ========== ========== +");
 		showBoardPaging();
+		System.out.println();
 		showBoardListMenu();
 
 	} // end of list
@@ -187,7 +189,8 @@ public class BoardApp {
 		service.hitBoard(bno);
 		board.setHit(board.getHit()+1);
 		
-		String str = "========= 게시물 ========= \n";
+		String str = "========== ========== ========== ========== ========== ========== =========="
+				+ " ========== ========== ========== ========== ========== ==========\n";
 		str += String.format("|| -NO | %7d", board.getNo());
 		str += "|| -TITLE | "+boardFormmater(45, board.getTitle());
 		str += "|| -WRITER | "+boardFormmater(20, board.getWriter());
@@ -198,11 +201,16 @@ public class BoardApp {
 		str += "\n";
 		str += "|| -LIKES | "+boardFormmater(board.getLike(), Integer.toString(board.getLike()));
 		System.out.println(str);
-		System.out.println(" ㄴ========== 댓글 =============");
 		List<Board> comments = service.getChildBoard(board.getNo());
+		
+		System.out.printf(" ㄴ========== 댓글(%d) ============= \n", comments.size());
+		if (comments.size() < 1) {
+			System.out.println( "  | 댓글이 없습니다. 첫 댓글을 달아주세요! |" );
+		}
+		
 		for(Board b : comments) {
-			str = "";
-			str += " | -WRITER | "+boardFormmater(15, b.getWriter());
+			str = " ++";
+			str += "| -WRITER | "+boardFormmater(15, b.getWriter());
 			str += " | -DATE | "+b.getDate().substring(0, 10);
 			str += " | -COMMENT | "+b.getContent() + " |";
 			System.out.println(str);
