@@ -112,7 +112,7 @@ public class BoardApp {
 			System.out.printf(b.showList(), b.getNo(), boardFormmater(45, b.getTitle()),
 					boardFormmater(20, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
 		}
-		System.out.println("+ ========== ========== ========== ========== ========== +++  ++++++  +++ ========== ========== ========== ========== ========== +");
+		System.out.println("+ ========== ========== ========== ========== ========== +++ ++++++ +++ ========== ========== ========== ========== ========== +");
 		showBoardPaging();
 		System.out.println();
 		showBoardListMenu();
@@ -133,7 +133,7 @@ public class BoardApp {
 				str += String.format("%5d ", i);				
 			}
 		}
-		str += " |";
+		str += "    |";
 		System.out.println(str);
 	}
 	
@@ -142,7 +142,6 @@ public class BoardApp {
 	}
 	
 	private void getSearchBoardList(String keyword) {
-		System.out.println("!!keyword?"+keyword);
 		list = service.searchBoard(keyword);
 	}
 
@@ -191,35 +190,35 @@ public class BoardApp {
 		
 		String str = "========== ========== ========== ========== ========== ========== =========="
 				+ " ========== ========== ========== ========== ========== ==========\n";
-		str += String.format("|| -NO | %7d", board.getNo());
-		str += "|| -TITLE | "+boardFormmater(45, board.getTitle());
-		str += "|| -WRITER | "+boardFormmater(20, board.getWriter());
-		str += "|| -DATE | "+board.getDate().substring(0, 10);
-		str += "|| -HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
+		str += String.format("|| +NO : %7d", board.getNo());
+		str += " || "+boardFormmater(45, board.getTitle());
+		str += " || "+boardFormmater(20, board.getWriter());
+		str += " || "+board.getDate().substring(0, 10);
+		str += " || +HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
 		str += "\n";
-		str += "|| -CONTENTS | "+board.getContent();
+		str += "|| +CONTENTS | "+board.getContent();
 		str += "\n";
-		str += "|| -LIKES | "+boardFormmater(board.getLike(), Integer.toString(board.getLike()));
+		str += "|| +LIKES♡ : "+boardFormmater(board.getLike(), Integer.toString(board.getLike()));
 		System.out.println(str);
 		List<Board> comments = service.getChildBoard(board.getNo());
 		
-		System.out.printf(" ㄴ========== 댓글(%d) ============= \n", comments.size());
+		System.out.printf(" ㄴ========== 댓글(%d) ========== ========== ========== ========== ========== ========== ========== \n", comments.size());
 		if (comments.size() < 1) {
 			System.out.println( "  | 댓글이 없습니다. 첫 댓글을 달아주세요! |" );
 		}
 		
 		for(Board b : comments) {
-			str = " ++";
-			str += "| -WRITER | "+boardFormmater(15, b.getWriter());
-			str += " | -DATE | "+b.getDate().substring(0, 10);
-			str += " | -COMMENT | "+b.getContent() + " |";
+			str = " ++ | -NO : "+String.format("%5d", b.getNo());
+			str += " || -WRITER : "+boardFormmater(15, b.getWriter());
+			str += " || -DATE : "+b.getDate().substring(0, 10);
+			str += " || -COMMENT : "+b.getContent();
 			System.out.println(str);
 		}
 		showBoardMenu();
 	}
 	
 	private void showBoardMenu() {
-		String str = "* 좋아요(q) | 댓글쓰기(e) | 목록으로(l) | 수정하기(w) | 삭제하기(d)";
+		String str = "* 좋아요(q) | 댓글쓰기(e) | 목록으로(l) | 수정하기(w) | 삭제하기(d) | 댓글삭제하기(f)";
 		System.out.println(str);
 		System.out.print(">>");
 		
@@ -236,8 +235,24 @@ public class BoardApp {
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("d") || menu.equals("D") || menu.equals("ㅇ")) {
 			deleteBoard();
+		} else if (menu.equals("f") || menu.equals("F") || menu.equals("ㄹ")) {
+			showDeleteComment();
 		} else {
 			System.out.println("!! 없는 메뉴 !!");
+			showBoard(curBoard.getNo());
+		}
+	}
+	
+	private void showDeleteComment() {
+		System.out.println("* 삭제할 코멘트 번호를 입력하세요.");
+		System.out.print(">>");
+		int bno = scn.nextInt();
+		if(checkBoardPassword(bno)) {
+			service.removeBoard(bno);
+			System.out.println("삭제 성공");
+			showBoard(curBoard.getNo());
+		} else {
+			System.out.println("삭제 실패");
 			showBoard(curBoard.getNo());
 		}
 	}
