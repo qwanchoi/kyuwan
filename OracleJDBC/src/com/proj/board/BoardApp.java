@@ -51,9 +51,9 @@ public class BoardApp {
 		board.setPassword(scn.next());
 
 		if (service.insertBoard(board)) {
-			System.out.println("게시 성공");
+			System.out.println("!!! 게시 성공 !!!");
 		} else {
-			System.out.println("게시 실패");
+			System.out.println("!!! 게시 실패 !!!");
 		}
 		getAllBoardList();
 		showBoardList(currentPage, pageSize);
@@ -154,6 +154,7 @@ public class BoardApp {
 		if (isNumeric(menu)) {
 			int bno = Integer.parseInt(menu);
 			showBoard(bno);
+			showBoardListMenu();
 		} else if (menu.equals("a") || menu.equals("A") || menu.equals("ㅁ")) {
 			getAllBoardList();
 			showBoardList(currentPage, pageSize);
@@ -180,7 +181,7 @@ public class BoardApp {
 	
 	private void showBoard(int bno) {
 		Board board = service.getBoard(bno);
-		if(board == null) {
+		if(board == null || board.getParent() >= 1) {
 			System.out.println("!!없는 게시번호 입니다!!");
 			return;
 		}
@@ -189,9 +190,9 @@ public class BoardApp {
 		board.setHit(board.getHit()+1);
 		
 		String str = "========== ========== ========== ========== ========== ========== =========="
-				+ " ========== ========== ========== ========== ========== ==========\n";
+				+ " ========== ========== ========== ========== ========== ========== ==========\n";
 		str += String.format("|| +NO : %7d", board.getNo());
-		str += " || "+boardFormmater(45, board.getTitle());
+		str += " || "+boardFormmater(75, board.getTitle());
 		str += " || "+boardFormmater(20, board.getWriter());
 		str += " || "+board.getDate().substring(0, 10);
 		str += " || +HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
@@ -311,12 +312,16 @@ public class BoardApp {
 		String pass = scn.next();
 		Board board = null;
 		board = service.getBoard(bno);
+		
 		if(board != null) {
+			if ( board.getParent() < 1 ) {
+				return false;
+			}
 			if(board.getPassword().equals(pass)) {
 				return true;
 			}
 		}
-		System.out.println("비밀번호가 틀렸습니다.");
+		
 		return false;
 	}
 	
@@ -348,6 +353,7 @@ public class BoardApp {
 
 	private String boardFormmater(int limit, String str) {
 		String mStr = "";
+		String result = "";
 		if (str == null)
 			mStr = "";
 		else
@@ -359,17 +365,38 @@ public class BoardApp {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String temp = mStr;
+		// 짭ㄹ은 경우
+		result = mStr;
 		for (int i = 0; i < limit - bArr.length; i++) {
-			temp += " ";
+			result += " ";
+		} 
+		
+		// 긴 경우
+		if( bArr.length > limit ) {
+			for(int i = 22; i < mStr.length(); i++) {
+				try {
+					bArr = mStr.substring(0, i).getBytes("EUC-KR");
+					if(bArr.length == limit-2) {
+						result = mStr.substring(0, i);
+						result += "..";
+						break;
+					} else if(bArr.length > limit-2) {
+						result = mStr.substring(0, i-1);
+						result += ".. ";
+						break;
+					}
+				} catch ( UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
-		return temp;
+		return result;
 	}
 
 	private boolean isNumeric(String str) {
 		try {
-			Double.parseDouble(str);
+			Integer.parseInt(str);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
