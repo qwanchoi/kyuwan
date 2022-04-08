@@ -47,7 +47,7 @@ public class BoardApp {
 		board.setContent(scn.nextLine());
 		System.out.print("글쓴이>> ");
 		board.setWriter(scn.nextLine());
-		System.out.println("암호>> ");
+		System.out.print("암호>> ");
 		board.setPassword(scn.next());
 
 		if (service.insertBoard(board)) {
@@ -96,10 +96,10 @@ public class BoardApp {
 		if (max > list.size())
 			max = list.size();
 
-		System.out.println("+ ========== ========== ========== ========== ========== +++ 게시판 +++ ========== ========== ========== ========== ========== +");
+		System.out.println(" + ========== ========== ========== ========== ========== +++ 게시판 +++ ========== ========== ========== ========== ========== +");
 		System.out.println("||    NO " // 7s
 				+ "||                     TITLE                     " // 45s
-				+ "||         WRITER       " // 20s
+				+ "||         WRITER        " // 21s
 				+ "||   DATE   " + "||   LIKES  " // 10s
 				+ "||   HITS   " // 10d
 				+ "||  COM  " // 7s
@@ -110,9 +110,9 @@ public class BoardApp {
 				break;
 			int childNum = service.getChildBoard(b.getNo()).size();
 			System.out.printf(b.showList(), b.getNo(), boardFormmater(45, b.getTitle()),
-					boardFormmater(20, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
+					boardFormmater(21, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
 		}
-		System.out.println("+ ========== ========== ========== ========== ========== +++ ++++++ +++ ========== ========== ========== ========== ========== +");
+		System.out.println(" + ========== ========== ========== ========== ========== +++ ++++++ +++ ========== ========== ========== ========== ========== +");
 		showBoardPaging();
 		System.out.println();
 		showBoardListMenu();
@@ -170,6 +170,7 @@ public class BoardApp {
 			String keyword = scn.nextLine();
 			
 			getSearchBoardList(keyword);
+			currentPage = 1;
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("z") || menu.equals("Z") || menu.equals("ㅋ")) {
 			System.out.println("프로그램 종료...");
@@ -193,7 +194,7 @@ public class BoardApp {
 				+ " ========== ========== ========== ========== ========== ========== ==========\n";
 		str += String.format("|| +NO : %7d", board.getNo());
 		str += " || "+boardFormmater(75, board.getTitle());
-		str += " || "+boardFormmater(20, board.getWriter());
+		str += " || "+boardFormmater(21, board.getWriter());
 		str += " || "+board.getDate().substring(0, 10);
 		str += " || +HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
 		str += "\n";
@@ -373,7 +374,7 @@ public class BoardApp {
 		
 		// 긴 경우
 		if( bArr.length > limit ) {
-			for(int i = 22; i < mStr.length(); i++) {
+			for(int i = limit/2; i < mStr.length(); i++) {
 				try {
 					bArr = mStr.substring(0, i).getBytes("EUC-KR");
 					if(bArr.length == limit-2) {
