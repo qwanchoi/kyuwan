@@ -32,10 +32,10 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	    System.out.println(r + "건 완료");
 	    if ( r > 0 ) return true;
 	} catch (SQLException e) {
-	    e.printStackTrace();
-	    System.out.println(board);
-	    System.out.println(sql);
-	    System.out.println("!!! 입력 실패 !!!");
+//	    e.printStackTrace();
+//	    System.out.println(board);
+//	    System.out.println(sql);
+//	    System.out.println("!!! 입력 실패 !!!");
 	} finally {
 	    disconnect();
 	}
@@ -48,7 +48,7 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	Board board = null;
 	
 	String sql = "SELECT * FROM board_table "
-		+ "WHERE b_no = ?";
+		+ "WHERE b_no = ? ";
 	
 	try {
 	    psmt = conn.prepareStatement(sql);
@@ -61,7 +61,7 @@ public class BoardServiceOracle extends DAO implements BoardService {
 		return board;
 	    }
 	} catch (SQLException e) {
-	    e.printStackTrace();
+//	    e.printStackTrace();
 	} finally {
 	    disconnect();
 	}
@@ -86,9 +86,9 @@ public class BoardServiceOracle extends DAO implements BoardService {
 		list.add(board);
 	    }
 	} catch (SQLException e) {
-	    e.printStackTrace();
+//	    e.printStackTrace();
 	    System.out.println(sql);
-	    System.out.println("!!게시판 목록 불러오기 실패!!");
+//	    System.out.println("!!게시판 목록 불러오기 실패!!");
 	} finally {
 	    disconnect();
 	}
@@ -160,9 +160,9 @@ public class BoardServiceOracle extends DAO implements BoardService {
 	    		list.add(board);
     	    }
     	} catch (SQLException e) {
-    	    e.printStackTrace();
+//    	    e.printStackTrace();
     	    System.out.println(sql);
-    	    System.out.println("!!게시판 목록 불러오기 실패!!");
+//    	    System.out.println("!!게시판 목록 불러오기 실패!!");
     	} finally {
     	    disconnect();
     	}

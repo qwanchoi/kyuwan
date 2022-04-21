@@ -47,13 +47,13 @@ public class BoardApp {
 		board.setContent(scn.nextLine());
 		System.out.print("글쓴이>> ");
 		board.setWriter(scn.nextLine());
-		System.out.println("암호>> ");
+		System.out.print("암호>> ");
 		board.setPassword(scn.next());
 
 		if (service.insertBoard(board)) {
-			System.out.println("게시 성공");
+			System.out.println("!!! 게시 성공 !!!");
 		} else {
-			System.out.println("게시 실패");
+			System.out.println("!!! 게시 실패 !!!");
 		}
 		getAllBoardList();
 		showBoardList(currentPage, pageSize);
@@ -96,10 +96,10 @@ public class BoardApp {
 		if (max > list.size())
 			max = list.size();
 
-		System.out.println("+ ========== ========== ========== ========== ========== +++ 게시판 +++ ========== ========== ========== ========== ========== +");
+		System.out.println(" + ========== ========== ========== ========== ========== +++ 게시판 +++ ========== ========== ========== ========== ========== +");
 		System.out.println("||    NO " // 7s
 				+ "||                     TITLE                     " // 45s
-				+ "||         WRITER       " // 20s
+				+ "||         WRITER        " // 21s
 				+ "||   DATE   " + "||   LIKES  " // 10s
 				+ "||   HITS   " // 10d
 				+ "||  COM  " // 7s
@@ -110,9 +110,9 @@ public class BoardApp {
 				break;
 			int childNum = service.getChildBoard(b.getNo()).size();
 			System.out.printf(b.showList(), b.getNo(), boardFormmater(45, b.getTitle()),
-					boardFormmater(20, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
+					boardFormmater(21, b.getWriter()), b.getDate().substring(0, 10), b.getLike(), b.getHit(), childNum);
 		}
-		System.out.println("+ ========== ========== ========== ========== ========== +++  ++++++  +++ ========== ========== ========== ========== ========== +");
+		System.out.println(" + ========== ========== ========== ========== ========== +++ ++++++ +++ ========== ========== ========== ========== ========== +");
 		showBoardPaging();
 		System.out.println();
 		showBoardListMenu();
@@ -133,7 +133,7 @@ public class BoardApp {
 				str += String.format("%5d ", i);				
 			}
 		}
-		str += " |";
+		str += "    |";
 		System.out.println(str);
 	}
 	
@@ -142,7 +142,6 @@ public class BoardApp {
 	}
 	
 	private void getSearchBoardList(String keyword) {
-		System.out.println("!!keyword?"+keyword);
 		list = service.searchBoard(keyword);
 	}
 
@@ -155,6 +154,7 @@ public class BoardApp {
 		if (isNumeric(menu)) {
 			int bno = Integer.parseInt(menu);
 			showBoard(bno);
+			showBoardListMenu();
 		} else if (menu.equals("a") || menu.equals("A") || menu.equals("ㅁ")) {
 			getAllBoardList();
 			showBoardList(currentPage, pageSize);
@@ -170,6 +170,7 @@ public class BoardApp {
 			String keyword = scn.nextLine();
 			
 			getSearchBoardList(keyword);
+			currentPage = 1;
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("z") || menu.equals("Z") || menu.equals("ㅋ")) {
 			System.out.println("프로그램 종료...");
@@ -181,7 +182,7 @@ public class BoardApp {
 	
 	private void showBoard(int bno) {
 		Board board = service.getBoard(bno);
-		if(board == null) {
+		if(board == null || board.getParent() >= 1) {
 			System.out.println("!!없는 게시번호 입니다!!");
 			return;
 		}
@@ -190,36 +191,36 @@ public class BoardApp {
 		board.setHit(board.getHit()+1);
 		
 		String str = "========== ========== ========== ========== ========== ========== =========="
-				+ " ========== ========== ========== ========== ========== ==========\n";
-		str += String.format("|| -NO | %7d", board.getNo());
-		str += "|| -TITLE | "+boardFormmater(45, board.getTitle());
-		str += "|| -WRITER | "+boardFormmater(20, board.getWriter());
-		str += "|| -DATE | "+board.getDate().substring(0, 10);
-		str += "|| -HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
+				+ " ========== ========== ========== ========== ========== ========== ==========\n";
+		str += String.format("|| +NO : %7d", board.getNo());
+		str += " || "+boardFormmater(75, board.getTitle());
+		str += " || "+boardFormmater(21, board.getWriter());
+		str += " || "+board.getDate().substring(0, 10);
+		str += " || +HITS | "+boardFormmater(10, Integer.toString(board.getHit())) + "||";
 		str += "\n";
-		str += "|| -CONTENTS | "+board.getContent();
+		str += "|| +CONTENTS | "+board.getContent();
 		str += "\n";
-		str += "|| -LIKES | "+boardFormmater(board.getLike(), Integer.toString(board.getLike()));
+		str += "|| +LIKES♡ : "+boardFormmater(board.getLike(), Integer.toString(board.getLike()));
 		System.out.println(str);
 		List<Board> comments = service.getChildBoard(board.getNo());
 		
-		System.out.printf(" ㄴ========== 댓글(%d) ============= \n", comments.size());
+		System.out.printf(" ㄴ========== 댓글(%d) ========== ========== ========== ========== ========== ========== ========== \n", comments.size());
 		if (comments.size() < 1) {
 			System.out.println( "  | 댓글이 없습니다. 첫 댓글을 달아주세요! |" );
 		}
 		
 		for(Board b : comments) {
-			str = " ++";
-			str += "| -WRITER | "+boardFormmater(15, b.getWriter());
-			str += " | -DATE | "+b.getDate().substring(0, 10);
-			str += " | -COMMENT | "+b.getContent() + " |";
+			str = " ++ | -NO : "+String.format("%5d", b.getNo());
+			str += " || -WRITER : "+boardFormmater(15, b.getWriter());
+			str += " || -DATE : "+b.getDate().substring(0, 10);
+			str += " || -COMMENT : "+b.getContent();
 			System.out.println(str);
 		}
 		showBoardMenu();
 	}
 	
 	private void showBoardMenu() {
-		String str = "* 좋아요(q) | 댓글쓰기(e) | 목록으로(l) | 수정하기(w) | 삭제하기(d)";
+		String str = "* 좋아요(q) | 댓글쓰기(e) | 목록으로(l) | 수정하기(w) | 삭제하기(d) | 댓글삭제하기(f)";
 		System.out.println(str);
 		System.out.print(">>");
 		
@@ -236,8 +237,24 @@ public class BoardApp {
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("d") || menu.equals("D") || menu.equals("ㅇ")) {
 			deleteBoard();
+		} else if (menu.equals("f") || menu.equals("F") || menu.equals("ㄹ")) {
+			showDeleteComment();
 		} else {
 			System.out.println("!! 없는 메뉴 !!");
+			showBoard(curBoard.getNo());
+		}
+	}
+	
+	private void showDeleteComment() {
+		System.out.println("* 삭제할 코멘트 번호를 입력하세요.");
+		System.out.print(">>");
+		int bno = scn.nextInt();
+		if(checkBoardPassword(bno)) {
+			service.removeBoard(bno);
+			System.out.println("삭제 성공");
+			showBoard(curBoard.getNo());
+		} else {
+			System.out.println("삭제 실패");
 			showBoard(curBoard.getNo());
 		}
 	}
@@ -296,12 +313,16 @@ public class BoardApp {
 		String pass = scn.next();
 		Board board = null;
 		board = service.getBoard(bno);
+		
 		if(board != null) {
+			if ( board.getParent() < 1 ) {
+				return false;
+			}
 			if(board.getPassword().equals(pass)) {
 				return true;
 			}
 		}
-		System.out.println("비밀번호가 틀렸습니다.");
+		
 		return false;
 	}
 	
@@ -333,6 +354,7 @@ public class BoardApp {
 
 	private String boardFormmater(int limit, String str) {
 		String mStr = "";
+		String result = "";
 		if (str == null)
 			mStr = "";
 		else
@@ -344,17 +366,38 @@ public class BoardApp {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String temp = mStr;
+		// 짭ㄹ은 경우
+		result = mStr;
 		for (int i = 0; i < limit - bArr.length; i++) {
-			temp += " ";
+			result += " ";
+		} 
+		
+		// 긴 경우
+		if( bArr.length > limit ) {
+			for(int i = limit/2; i < mStr.length(); i++) {
+				try {
+					bArr = mStr.substring(0, i).getBytes("EUC-KR");
+					if(bArr.length == limit-2) {
+						result = mStr.substring(0, i);
+						result += "..";
+						break;
+					} else if(bArr.length > limit-2) {
+						result = mStr.substring(0, i-1);
+						result += ".. ";
+						break;
+					}
+				} catch ( UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
-		return temp;
+		return result;
 	}
 
 	private boolean isNumeric(String str) {
 		try {
-			Double.parseDouble(str);
+			Integer.parseInt(str);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
