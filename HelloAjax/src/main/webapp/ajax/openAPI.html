@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ajax/openAPI</title>
+</head>
+<body>
+	<script>
+		let url = `https://api.odcloud.kr/api/15077586/v1/centers?page=1&perPage=284&returnType=JSON&serviceKey=PlZcVmJ9c5Xmx1IyiUcZ4qh6vb6Fv5Es8ExZDUrFN0BQL5yu4DCE85XdPFYiK0I6wo3tWAps%2B2nFDmIPEogqgg%3D%3D`;
+		let xhtp = new XMLHttpRequest();
+		xhtp.open('get', url);
+		xhtp.send();
+		xhtp.onload = function() {
+			let data = JSON.parse(xhtp.responseText);
+			console.log(data);
+		}
+	</script>
+</body>
+</html>
