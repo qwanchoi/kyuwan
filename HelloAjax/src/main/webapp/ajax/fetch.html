@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ajax/fetch.html</title>
+<script src="ajax2.js"></script>
+</head>
+<body>
+	<script>
+	// Ajax => XMLHttpRequest: => fetch();
+	let xhtp = new XMLHttpRequest();
+	xhtp.open('get', '../studentList.json');
+	xhtp.send();
+	xhtp.onload = function() {
+		console.log('xmlhttprequest');
+		console.log(xhtp.responseText);
+		
+		//let xhpt2 = new XMLHttpRequest();
+		//xhtp.open();
+		//xhtp.send();
+		//xhtp2.onload = function() {
+		//	
+		//}
+	}
+	
+	fetch('../studentList.json')
+		.then(function(result) {
+			let val = result.json(); // stream => json(), text() pending
+			console.log(val);
+			return val;
+		})
+		.then(function(result) {
+			console.log(result);
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
+	
+	</script>
+</body>
+</html>

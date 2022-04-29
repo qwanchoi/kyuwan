@@ -5,15 +5,121 @@
 <title>ajax/openAPI</title>
 </head>
 <body>
+	<input type="text" id="sido" value="대전광역시"><button id="findBtn">찾기</button>
+	<div id="show">
+		<table border="1">
+			<thead id="thead">
+			</thead>
+			<tbody id="tbody">
+			</tbody>
+		</table>
+	</div>
+	
+	
 	<script>
-		let url = `https://api.odcloud.kr/api/15077586/v1/centers?page=1&perPage=284&returnType=JSON&serviceKey=PlZcVmJ9c5Xmx1IyiUcZ4qh6vb6Fv5Es8ExZDUrFN0BQL5yu4DCE85XdPFYiK0I6wo3tWAps%2B2nFDmIPEogqgg%3D%3D`;
-		let xhtp = new XMLHttpRequest();
-		xhtp.open('get', url);
-		xhtp.send();
-		xhtp.onload = function() {
-			let data = JSON.parse(xhtp.responseText);
-			console.log(data);
+		console.log('start');
+	
+		let fields = ['id', 'sido', 'address' ,'phoneNumber', 'zipCode']	
+		
+		function init() {
+			// 비동기 처리방식 (AJAX)
+			let url = `https://api.odcloud.kr/api/15077586/v1/centers?page=1&perPage=284&returnType=JSON&serviceKey=PlZcVmJ9c5Xmx1IyiUcZ4qh6vb6Fv5Es8ExZDUrFN0BQL5yu4DCE85XdPFYiK0I6wo3tWAps%2B2nFDmIPEogqgg%3D%3D`;
+			let data = '';
+			let xhtp = new XMLHttpRequest();
+			xhtp.open('GET', url);
+			xhtp.send();
+			xhtp.onload = loadCallBack;			
+			
+			let findBtn = document.getElementById('findBtn');
+			findBtn.addEventListener('click', findCallBack);
 		}
+		init();
+		
+		function findCallBack() {
+			// 기능구현. input.vlaue 속성을 읽어와서filterAry => 헤더, 바디.
+			let searchSido = document.getElementById('sido').value;
+			
+			let filterAry = result.data.filter(function(elem) {
+				
+				return elem.sido.indexOf(searchSido) != -1; // 포함.
+			});
+			
+			makeBody(filterAry);
+			
+			//입력값 지우기
+			document.getElementById('sido').value = '';
+		} // (end of findCallBack()
+		
+		function loadCallBack(event) {
+			
+			console.log(event);
+			console.log(event.currentTarget);
+			console.log('center');
+			result = JSON.parse(this.responseText);
+			//console.log(result);
+			console.log("총건수: " + result.totalCount);
+			
+			console.log(result.data[0]);
+			
+			result.data.forEach(function (elem) {
+				if(elem.sido == '서울특별시') {
+					//console.log(`id: ${elem.id}, cneter: ${elem.centerName}`);
+				}
+			});
+			
+			let filterAry = result.data.filter(function(elem) {
+				return elem.sido == '대전광역시';
+			});
+			/// console.log(filterAry);
+			 
+			// head
+			let head = document.getElementById('thead');
+			let tr = document.createElement('tr');
+			head.appendChild(tr);
+			fields.forEach(function(elem) {
+				let td = document.createElement('th');
+				td.innerHTML = elem.toUpperCase();
+				tr.appendChild(td);
+			});
+			
+			makeBody(filterAry);
+			 
+		} // end of loadCallBack()
+		
+		function makeBody(ary) {
+			// 이미 생성된 조회정보가 있으면 삭제.
+			// body
+			let body = document.getElementById('tbody');
+			
+			let childTr = document.querySelectorAll('#tbody>tr');
+			childTr.forEach(function(elem) {
+				//elem.remove(); // tr 삭제.
+				body.removeChild(elem); // 부모요소로 하위객체를 지우겠습니다.
+			})
+		
+			
+			ary.forEach(function(center) {
+				let tr = document.createElement('tr');
+				body.appendChild(tr);
+				
+				fields.forEach(function(field) {
+					let td = document.createElement('td');
+					// address 필드 일 경우에는 링크.
+					if( field == 'address') {
+						let aTag = document.createElement('a');
+						aTag.setAttribute('href', `daumApi.html?x=${center.lat}&y=${center.lng}&facil=${center.facilityName}`);
+						aTag.setAttribute('target', '_blank');
+						aTag.innerHTML = center[field];
+						
+						td.appendChild(aTag);
+					} else {
+						td.innerHTML = center[field];
+					}
+					tr.appendChild(td);			
+				});
+			});
+		} // end of makeBody();
+		
 	</script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<button id="delChecked">선택삭제</button>
+	<button id='checkAll'>전체선택</button>
+	<table id='mTable' border='1'>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>Hongkildong1</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>Hongkildong2</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>Hongkildong3</td>
+		</tr>
+	</table>
+	<script>
+	console.log("1433_1");
+		let delBtn = document.getElementById('delChecked');
+		let checkAllBtn = document.getElementById('checkAll');
+		
+		delBtn.addEventListener('click',function(e) {
+			let allTr = document.querySelectorAll('#mTable tr');
+			//console.log(allTr);
+			allTr.forEach(function(tr) {
+				//console.log(tr.firstElementChild.firstElementChild.checked);
+				if(tr.firstElementChild.firstElementChild.checked) {
+					tr.remove();
+				}
+			});
+		});
+		
+		checkAllBtn.addEventListener('click', function(e) {
+			let allTr = document.querySelectorAll('#mTable tr');
+			allTr.forEach(function(tr) {
+				tr.firstElementChild.firstElementChild.checked = true;
+			});
+		});
+		
+		
+	</script>
+</body>
+</html>
