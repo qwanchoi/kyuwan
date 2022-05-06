@@ -87,6 +87,7 @@ public class MemberDAO extends DAO {
 		vo.setPasswd(rs.getString("passwd"));
 		vo.setName(rs.getString("name"));
 		vo.setEmail(rs.getString("email"));
+		vo.setProfile(rs.getString("profile"));
 		list.add(vo);
 	    }
 	} catch (SQLException e) {
@@ -99,7 +100,7 @@ public class MemberDAO extends DAO {
     
     public void insertMember(MemberVO member) {
 	conn = getConnect();
-	String sql = "INSERT INTO member(id, name, passwd, email) VALUES(?, ?, ?, ?)";
+	String sql = "INSERT INTO member(id, name, passwd, email, profile) VALUES(?, ?, ?, ?, ?)";
 	
 	try {
 	    psmt = conn.prepareStatement(sql);
@@ -107,6 +108,7 @@ public class MemberDAO extends DAO {
 	    psmt.setString(2, member.getName());
 	    psmt.setString(3, member.getPasswd());
 	    psmt.setString(4, member.getEmail());
+	    psmt.setString(5, member.getProfile());
 	    
 	    int r = psmt.executeUpdate();
 	    System.out.println(r + "건 입력.");

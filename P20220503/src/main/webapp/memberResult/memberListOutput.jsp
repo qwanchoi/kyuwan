@@ -14,10 +14,19 @@
 		<c:when test="${empty all }"><h3>회원정보가 없습니다.</h3></c:when>
 		<c:otherwise>
 			<table border="1">
-				<thead><tr><th>아이디</th><th>이름</th><th>이메일</th><th>비밀번호</th></tr></thead>
+				<thead><tr><th>아이디</th><th>이름</th><th>이메일</th><th>비밀번호</th><th>이미지</th></tr></thead>
 				<tbody>
 					<c:forEach items="${all }" var="member">
-						<tr><td>${member.id }</td><td>${member.name }</td><td>${member.email }</td><td>${member.passwd }</td></tr>
+						<tr>
+							<td>${member.id }</td>
+							<td>${member.name }</td>
+							<td>${member.email }</td>
+							<td>${member.passwd }</td>
+							<td><c:if test="${!empty member.profile }">
+								<img width="60px" src="${pageContext.servletContext.contextPath }/upload/${member.profile}">
+								</c:if>
+							</td>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
