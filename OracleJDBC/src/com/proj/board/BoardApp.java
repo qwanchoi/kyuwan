@@ -157,6 +157,7 @@ public class BoardApp {
 			showBoardListMenu();
 		} else if (menu.equals("a") || menu.equals("A") || menu.equals("ㅁ")) {
 			getAllBoardList();
+			currentPage = 1;
 			showBoardList(currentPage, pageSize);
 		} else if (menu.equals("w") || menu.equals("W") || menu.equals("ㅈ") || menu.equals("ㅉ")) {
 			showBoardInsertForm();
@@ -374,7 +375,7 @@ public class BoardApp {
 		
 		// 긴 경우
 		if( bArr.length > limit ) {
-			for(int i = limit/2; i < mStr.length(); i++) {
+			for(int i = 1; i < mStr.length(); i++) {
 				try {
 					bArr = mStr.substring(0, i).getBytes("EUC-KR");
 					if(bArr.length == limit-2) {
