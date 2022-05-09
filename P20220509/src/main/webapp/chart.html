@@ -1,0 +1,43 @@
+<html>
+<meta charset="UTF8">
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+    	  var aryData = [];
+    	  aryData.push(['Dept', 'cnt per dept']);
+    	  
+    	  fetch('EmployeePerDept')
+    	  	.then(result => result.json())
+    	  	.then(callBack)
+    	  	.catch(err => console.log(err));
+    	  
+    	  function callBack(empData) {
+  	  		console.log(empData);
+		  		for(let field in empData) {
+		  			let ary = [];
+		  			ary.push(field);
+		  			ary.push(empData[field]);
+		  			aryData.push(ary);
+		  		}
+		  		console.log(aryData);
+		  		var data = google.visualization.arrayToDataTable(aryData);
+	
+		        var options = {
+		          title: '부서별 사원 수'
+		        };
+	
+		        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+	
+		        chart.draw(data, options);
+		  	}
+      }
+    </script>
+  </head>
+  <body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
