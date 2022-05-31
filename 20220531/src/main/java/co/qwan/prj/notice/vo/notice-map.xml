@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.qwan.prj.notice.service.NoticeMapper">
+
+	<resultMap id="noticeMap" type="co.qwan.prj.notice.vo.NoticeVO">
+		<id property="noticeId" column="notice_id" />
+		<result property="noticeName" column="notice_name"/>
+		<result property="noticeTitle" column="notice_title"/>
+		<result property="noticeContents" column="notice_contents" />
+		<result property="noticeDate" column="notice_date" />
+		<result property="noticeHit" column="notice_hit" />
+		<result property="noticeAttach" column="notice_attach" />
+		<result property="noticeDir" column="notice_dir"/>
+	</resultMap>
+	
+	<select id="noticeSelectList" resultMap="noticeMap">
+		SELECT * FROM notice
+		WHERE
+		<if test="state == 1">1 = 1 </if>
+		<if test="state == 2">NOTICE_NAME = #{key}</if>
+		<if test="state == 3">NOTICE_TITLE LIKE '%'||#{key}||'%'</if>
+		<if test="state == 4">NOTICE_CONTENTS LIKE '%'||#{key}||'%' </if>
+		ORDER BY notice_id DESC
+	</select>
+	
+	<select id="noticeSelect" resultMap="noticeMap">
+		SELECT * FROM notice WHERE notice_id = #{noticeId}
+	</select>
+	
+	<insert id="noticeInsert">
+		<selectKey resultType="int" keyProperty="noticeId" order="BEFORE">
+			SELECT CASE WHEN MAX(notice_id) != 0 THEN MAX(notice_id)+1
+				ELSE 1 END AS id FROM notice
+		</selectKey>
+		INSERT INTO NOTICE
+		VALUES(#{noticeId}, #{noticeName}, #{noticeTitle}, #{noticeContents},
+			#{noticeDate}, 0, #{noticeAttach}, #{noticeDir})
+	</insert>
+	
+	<update id="noticeUpdate" parameterType="co.qwan.prj.notice.vo.NoticeVO">
+		UPDATE notice
+		<set>
+			<if test="noticeName != null">notice_name = #{noticeName},</if>
+			<if test="noticeTitle != null">notice_title = #{noticeTitle},</if>
+			<if test="noticeContents != null">notice_contents = #{noticeContent},</if>
+			<if test="noticeDate != null">notice_date = #{noticeDate},</if>
+			<if test="noticeAttach != null">notice_attach = #{noticeAttach},</if>
+			<if test="noticeDir != null">notice_dir = #{noticeDir},</if>
+		</set>
+		WHERE notice_id = #{noticeId}
+	</update>
+	
+	<delete id="noticeDelete" parameterType="co.qwan.prj.notice.vo.NoticeVO">
+		DLETE FROM notice WHERE notice_id = #{noticeId}
+	</delete>
+	
+	<update id="noticeHitUpdate" parameterType="int" >
+		UPDATE notice
+		SET notice_hit = notice_hit + 1 WHERE notice_id = #{id}	
+	</update>
+</mapper>
