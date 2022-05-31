@@ -1,5 +1,8 @@
 package co.qwan.prj.student.web;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,5 +51,31 @@ public class StudentController {
 			data = "Y"; // 사용할 수 있는 아이디
 		}
 		return data;
+	}
+	
+	@RequestMapping("/studentLoginForm.do")
+	public String studentLoginForm(StudentVO vo, Model model) {
+		
+		return "student/studentLoginForm";
+	}
+	
+	@PostMapping("/studentLogin.do")
+	public String studentLogin(StudentVO vo, Model model, HttpSession session) {
+		vo = studentDao.studentSelect(vo);
+		if(vo != null ) {
+			session.setAttribute("id", vo.getId());
+			session.setAttribute("name", vo.getName());
+			model.addAttribute("message", "님 환영!!");
+		} else {
+			model.addAttribute("message", "아이디 또는 패스워드 틀림.");
+		}
+		return "student/studentLogin";
+	}
+	
+	@RequestMapping("/studentLogout.do")
+	public String studentLogout(HttpSession session, Model model) {
+		session.invalidate();
+		model.addAttribute("message", "정상적으로 로그아웃 되었습니다.");
+		return "student/studentLogout";
 	}
 }
