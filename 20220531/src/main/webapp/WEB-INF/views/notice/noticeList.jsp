@@ -19,14 +19,14 @@
 			<h1>공지사항 목록</h1>
 		</div>
 		<div>
-			<form id="frm" action="" method="post">
-				<select id="state" name="state">
+			<form id="frm" action="javascript:searchList()">
+				<select id="state" name="state" form="frm">
 					<option value="1">전체</option>
 					<option value="2">작성자</option>
 					<option value="3">제 목</option>
 					<option value="4">내 용</option>
 				</select>&nbsp; <input type="text" id="key" name="key">&nbsp;
-				<button type="button" onclick="searchNotice()">검색</button>
+				<input type="submit" value="검 색">
 			</form>
 		</div>
 		<br />
@@ -84,6 +84,38 @@
 			frm2.submit();
 		}
 	});
+</script>
+<script type="text/javascript">
+	function searchList() {
+		fetch('ajaxSearchList.do', {
+			method: 'POST',
+			body: new FormData(document.getElementById('frm'))
+		})
+		.then(response => response.json())
+		.then(result => {
+			drawTbTable(result);
+		});
+	}
+	
+	function drawTbTable(dataList) {
+		let tbody = document.querySelector('#tb tbody');
+		let theadArr = ['noticeId', 'noticeName', 
+			'noticeTitle', 'noticeDate',  'noticeHit', 'noticeAttach'];
+		//while(tbody.children[0]){
+//			tbody.children[0].remove();
+		//}
+		tbody.innerHTML = '';
+		for(let data of dataList) {
+			let mtr = document.createElement('tr');
+			theadArr.forEach( v => {
+				let mtd = document.createElement('td');
+				mtd.innerText = data[v];
+				mtr.appendChild(mtd);
+			});
+			
+			tbody.appendChild(mtr);
+		}
+	}
 </script>
 </body>
 </html>
