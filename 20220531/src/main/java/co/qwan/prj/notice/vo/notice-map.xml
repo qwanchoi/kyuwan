@@ -32,9 +32,18 @@
 			SELECT CASE WHEN MAX(notice_id) != 0 THEN MAX(notice_id)+1
 				ELSE 1 END AS id FROM notice
 		</selectKey>
-		INSERT INTO NOTICE
-		VALUES(#{noticeId}, #{noticeName}, #{noticeTitle}, #{noticeContents},
-			#{noticeDate}, 0, #{noticeAttach}, #{noticeDir})
+		INSERT INTO NOTICE (notice_id, notice_name, notice_title,
+		 notice_contents, notice_date, notice_hit, notice_attach, notice_dir)
+		VALUES(
+			#{noticeId},
+			#{noticeName},
+			#{noticeTitle},
+			#{noticeContents},
+			#{noticeDate},
+			0, 
+			#{noticeAttach},  
+			#{noticeDir} 
+		)
 	</insert>
 	
 	<update id="noticeUpdate" parameterType="co.qwan.prj.notice.vo.NoticeVO">
@@ -42,7 +51,7 @@
 		<set>
 			<if test="noticeName != null">notice_name = #{noticeName},</if>
 			<if test="noticeTitle != null">notice_title = #{noticeTitle},</if>
-			<if test="noticeContents != null">notice_contents = #{noticeContent},</if>
+			<if test="noticeContents != null">notice_contents = #{noticeContents},</if>
 			<if test="noticeDate != null">notice_date = #{noticeDate},</if>
 			<if test="noticeAttach != null">notice_attach = #{noticeAttach},</if>
 			<if test="noticeDir != null">notice_dir = #{noticeDir},</if>
@@ -51,7 +60,7 @@
 	</update>
 	
 	<delete id="noticeDelete" parameterType="co.qwan.prj.notice.vo.NoticeVO">
-		DLETE FROM notice WHERE notice_id = #{noticeId}
+		DELETE FROM notice WHERE notice_id = #{noticeId}
 	</delete>
 	
 	<update id="noticeHitUpdate" parameterType="int" >

@@ -1,15 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+	table tr:hover {
+		cursor : pointer;
+		background: gray;
+	}
+</style>
 <body>
 	<div align="center">
-		<div><h1>공지사항 목록</h1></div>
+		<div>
+			<h1>공지사항 목록</h1>
+		</div>
 		<div>
 			<form id="frm" action="" method="post">
 				<select id="state" name="state">
@@ -17,47 +25,65 @@
 					<option value="2">작성자</option>
 					<option value="3">제 목</option>
 					<option value="4">내 용</option>
-				</select>&nbsp;
-				<input type="text" id="key" name="key">&nbsp;
+				</select>&nbsp; <input type="text" id="key" name="key">&nbsp;
 				<button type="button" onclick="searchNotice()">검색</button>
 			</form>
 		</div>
-	</div><br />
-	<div>
-		<table id="tb" border="1">
-			<thead>
-				<tr>
-					<th width="70">순번</th>
-					<th width="150">작성자</th>
-					<th width="300">제 목</th>
-					<th width="150">작성일</th>
-					<th width="70">조회수</th>
-					<th width="70">첨부파일</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:if test="${notices ne null}">
-					<c:forEach items="${notices }" var="n">
-						<tr>
-							<td>${n.noticeId }</td>
-							<td>${n.noticeName }</td>
-							<td>${n.noticeTitle }</td>
-							<td>${n.noticeDate }</td>
-							<td>${n.noticeHit }</td>
-							<td>${n.noticeAttach }</td>
-						</tr>
-					</c:forEach>
-				</c:if>
-				<c:if test="${notices eq null }">
+		<br />
+		<div>
+			<table id="tb" border="1">
+				<thead>
 					<tr>
-						<td colspan="6" align="center">게시글이 존재하지 않습니다.</td>
+						<th width="70">순번</th>
+						<th width="150">작성자</th>
+						<th width="300">제 목</th>
+						<th width="150">작성일</th>
+						<th width="70">조회수</th>
+						<th width="70">첨부파일</th>
 					</tr>
-				</c:if>
-			</tbody>
-		</table>
-	</div><br />
-	<div>
-		<button type="button" onclick="location.href='noticeInsertForm.do'">글 등록</button>
+				</thead>
+				<tbody>
+					<c:if test="${notices ne null}">
+						<c:forEach items="${notices }" var="n">
+							<tr>
+								<td>${n.noticeId }</td>
+								<td>${n.noticeName }</td>
+								<td>${n.noticeTitle }</td>
+								<td>${n.noticeDate }</td>
+								<td>${n.noticeHit }</td>
+								<td>${n.noticeAttach }</td>
+							</tr>
+						</c:forEach>
+					</c:if>
+					<c:if test="${notices eq null }">
+						<tr>
+							<td colspan="6" align="center">게시글이 존재하지 않습니다.</td>
+						</tr>
+					</c:if>
+				</tbody>
+			</table>
+			<form id="frm2" action="" method="post">
+				<input type="hidden" id="noticeId" name="noticeId">
+			</form>
+		</div>
+		<br />
+		<div>
+			<button type="button" onclick="location.href='noticeInsertForm.do'">글
+				등록</button>
+		</div>
+		
 	</div>
+	<!-- 그룹이벤트 생성(상세조회) -->
+<script>
+	let list = document.querySelector('tbody');
+	list.addEventListener('click', function(ev) {
+		if(ev.target.tagName === 'TD') {
+			//location.href = 'getContent.do?noticeId='+ev.target.parentNode.children[0].textContent;
+			frm2.noticeId.value = ev.target.parentNode.children[0].textContent;
+			frm2.action="getContent.do";
+			frm2.submit();
+		}
+	});
+</script>
 </body>
 </html>
