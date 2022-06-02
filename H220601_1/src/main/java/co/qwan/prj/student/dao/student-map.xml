@@ -15,4 +15,21 @@
 				AND password = #{password}
 			</if>
 	</select>
+	
+	<insert id="insertStudent" parameterType="co.qwan.prj.student.vo.StudentVO" >
+		INSERT INTO STUDENT
+		VALUES(#{id}, #{password}, #{name}, #{address}, #{tel}, #{birthday}, #{age})
+	</insert>
+	
+	<update id="updateStudent" parameterType="co.qwan.prj.student.vo.StudentVO">
+		UPDATE STUDENT
+		SET name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="checkId" parameterType="String" resultType="boolean">
+		SELECT CASE WHEN COUNT(id) = 1 THEN 1 ELSE 0 END AS id
+		FROM student
+		WHERE id = #{id}
+	</select>
 </mapper>

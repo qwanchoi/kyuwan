@@ -4,6 +4,7 @@ import java.util.List;
 
 import co.qwan.prj.student.vo.StudentVO;
 
+
 public interface StudentService {
 	public List<StudentVO> selectStudentList();
 	public StudentVO selectStudent(StudentVO vo);
