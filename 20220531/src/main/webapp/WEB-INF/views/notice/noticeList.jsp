@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="resources/jquery-3.6.0.min.js"></script>
 </head>
 <style>
 	table tr:hover {
@@ -19,7 +20,7 @@
 			<h1>공지사항 목록</h1>
 		</div>
 		<div>
-			<form id="frm" action="javascript:searchList()">
+			<form id="frm" action="javascript:searchListJQ()">
 				<select id="state" name="state" form="frm">
 					<option value="1">전체</option>
 					<option value="2">작성자</option>
@@ -75,17 +76,56 @@
 	</div>
 	<!-- 그룹이벤트 생성(상세조회) -->
 <script>
-	let list = document.querySelector('tbody');
-	list.addEventListener('click', function(ev) {
-		if(ev.target.tagName === 'TD') {
-			//location.href = 'getContent.do?noticeId='+ev.target.parentNode.children[0].textContent;
-			frm2.noticeId.value = ev.target.parentNode.children[0].textContent;
-			frm2.action="getContent.do";
-			frm2.submit();
-		}
-	});
+	tbodyEventInit();
+	function tbodyEventInit(){
+		let list = document.querySelector('tbody');
+		list.addEventListener('click', function(ev) {
+			if(ev.target.tagName === 'TD') {
+				//location.href = 'getContent.do?noticeId='+ev.target.parentNode.children[0].textContent;
+				frm2.noticeId.value = ev.target.parentNode.children[0].textContent;
+				frm2.action="getContent.do";
+				frm2.submit();
+			}
+		});
+	}
 </script>
 <script type="text/javascript">
+	function searchListJQ(){
+		let state = $("#state").val(); // document.getelementById("state").value();
+		let key = $("#key").val();
+		
+		$.ajax({
+			url: "ajaxSearchList.do", // url
+			type: "POST",
+			data: {"state":state, "key":key},
+			dataType: "json", // 돌려받을 결과의 데이터 타입 html, text, xml, json, jsonp
+			success: function(data) { //성공했을 때 실행할 함수 결과는 data에 담김
+				// 수행할 영역
+				htmlConvertJQ(data);
+			},
+			error: function() {
+				alert('의도치 않는 오류가 발생 했습니다.');
+			}
+		});
+	}
+	
+	function htmlConvertJQ(data) {
+		$("tbody").children().remove(); // tbody
+		let tbody = $("tbody");
+		$.each(data, function(index, n) {
+			var row = $("<tr />").append(
+					$("<td />").text(n.noticeId),
+					$("<td />").text(n.noticeName),
+					$("<td />").text(n.noticeTitle),
+					$("<td />").text(n.noticeDate),
+					$("<td />").text(n.noticeHit),
+					$("<td />").text(n.noticeAttach),
+				);
+			tbody.append(row); //행을 추가
+		});
+		$("#tb").append(tbody); //tbody를 추가
+	}
+	
 	function searchList() {
 		fetch('ajaxSearchList.do', {
 			method: 'POST',
