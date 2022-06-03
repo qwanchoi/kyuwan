@@ -11,7 +11,18 @@
 		<put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
 	</definition>
 	
+	<definition name="admin.homepage" template="/WEB-INF/views/admin/adminlayout.jsp">
+		<put-attribute name="title" value="Admin" />
+		<put-attribute name="header" value="/WEB-INF/views/admin/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/admin/footer.jsp" />
+	</definition>
+	
+	<definition name="*" extends="admin.homepage">
+		<put-attribute name="body" value="/WEB-INF/views/admin/{1}.jsp" />
+	</definition>
+	
 	<definition name="*/*" extends="myapp.homepage">
-		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" ></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
 	</definition>
 </tiles-definitions>
