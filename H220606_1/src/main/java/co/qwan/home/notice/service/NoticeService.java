@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import co.qwan.home.notice.vo.NoticeVO;
 
-@Service
 public interface NoticeService {
 	public List<NoticeVO> selectList();
 	public NoticeVO selectOne(NoticeVO vo);

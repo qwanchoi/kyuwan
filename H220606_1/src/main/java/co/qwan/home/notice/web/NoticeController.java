@@ -3,6 +3,7 @@ package co.qwan.home.notice.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +16,13 @@ import co.qwan.home.notice.vo.NoticeVO;
 public class NoticeController {
 	
 	@Autowired
-	NoticeService noticeServiceImpl;
+	@Qualifier("noticeServiceImpl")
+	NoticeService noticeService;
 	
 	@RequestMapping("/list")
 	public String noticeList(Model model) {
-		List<NoticeVO> list = noticeServiceImpl.selectList();
+		List<NoticeVO> list = noticeService.selectList();
 		model.addAttribute("list", list);
-		return "notice/list";
+		return "notice.list";
 	}
 }
