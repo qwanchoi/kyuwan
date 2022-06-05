@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.qwan.home.notice.dao.NoticeMapper">
+
+	<resultMap id="noticeMap" type="co.qwan.home.notice.vo.NoticeVO" >
+		<id property="id" column="n_id" />
+		<result property="name" column="n_name" />
+		<result property="password" column="n_password" />
+		<result property="title" column="n_title" />
+		<result property="contents" column="n_contents"/>
+		<result property="createdAt" column="n_createdAt" />
+	</resultMap>
+	
+	<select id="selectList" resultMap="noticeMap">
+		SELECT * FROM notice_main
+	</select>
+</mapper>

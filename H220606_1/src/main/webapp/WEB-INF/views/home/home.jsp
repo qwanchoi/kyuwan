@@ -2,13 +2,15 @@
 <%@ page session="false" %>
 <html>
 <head>
+<meta charset="UTF-8">
 	<title>Home</title>
 </head>
 <body>
 <h1>
-	Hello world!  
+	Welcome!!
 </h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+<div>
+	<a href="notice/list">게시판 목록</a>
+</div>
 </body>
 </html>
