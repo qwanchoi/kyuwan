@@ -24,7 +24,7 @@ public class NoticeController {
 	public String noticeList(Model model) throws Exception {
 		List<NoticeVO> list = noticeService.selectList();
 		if(true) {
-			throw new Exception("예외 발생!!");
+//			throw new Exception("예외 발생!!");
 		}
 		
 		model.addAttribute("list", list);
