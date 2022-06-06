@@ -10,11 +10,11 @@
 	<properties>
 		<java-version>11</java-version>
 		<org.springframework-version>4.3.30.RELEASE</org.springframework-version>
-		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.aspectj-version>1.9.9.1</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
 	<dependencies>
-		<!-- Spring -->
+	<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -32,7 +32,7 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		<!-- DB -->
+	<!-- DB -->
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
@@ -64,7 +64,7 @@
 		    <version>2.0.7</version>
 		</dependency>
 		
-		<!-- Lombok -->
+	<!-- Lombok -->
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
@@ -73,7 +73,7 @@
 		    <scope>provided</scope>
 		</dependency>
 		
-		<!-- Jackson -->
+	<!-- Jackson -->
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
@@ -81,7 +81,7 @@
 		    <version>2.13.3</version>
 		</dependency>
 		
-		<!-- tiles -->		
+	<!-- tiles -->		
 		<!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-extras -->
 		<dependency>
 		    <groupId>org.apache.tiles</groupId>
@@ -89,14 +89,22 @@
 		    <version>3.0.8</version>
 		</dependency>
 		
-		<!-- AspectJ -->
+	<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
-		</dependency>	
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${org.aspectj-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		
-		<!-- Logging -->
+	<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
