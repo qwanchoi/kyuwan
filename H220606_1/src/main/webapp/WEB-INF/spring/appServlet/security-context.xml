@@ -4,11 +4,29 @@
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+	
+	<bean id="customAccessDenied" class="co.qwan.home.security.CustomAccessDeniedHandler" />
+	
 	<security:http>
-		<security:form-login/>
+		<!-- 접근 권한별 url 제한 설정 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll" />
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
+		
+		<!-- <security:access-denied-handler error-page="/accessError" /> -->
+		<security:access-denied-handler ref="customAccessDenied" />
+		
+		<security:form-login login-page="/customLogin"/>
+		
 	</security:http>
 	<security:authentication-manager>
-	
+		<!-- UserDetailsService 를 이용해 실제 인증과 권한 처리 -->
+		<security:authentication-provider>
+			<security:user-service>
+				<!-- PasswordEncoder 가 필요하지만 {noop} 으로 무시가능 -->
+				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER" />
+				<security:user name="admin" password="{noop}admin" authorities="ROLE_PASSWORD" />
+			</security:user-service>
+		</security:authentication-provider>
 	</security:authentication-manager>
 </beans>
