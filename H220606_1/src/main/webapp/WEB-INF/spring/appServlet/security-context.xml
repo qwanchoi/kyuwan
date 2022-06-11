@@ -25,7 +25,7 @@
 			<security:user-service>
 				<!-- PasswordEncoder 가 필요하지만 {noop} 으로 무시가능 -->
 				<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER" />
-				<security:user name="admin" password="{noop}admin" authorities="ROLE_PASSWORD" />
+				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN" />
 			</security:user-service>
 		</security:authentication-provider>
 	</security:authentication-manager>
