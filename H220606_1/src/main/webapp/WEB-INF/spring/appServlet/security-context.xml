@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<bean id="customAccessDenied" class="co.qwan.home.security.CustomAccessDeniedHandler" />
+	<bean id="customLoginSuccess" class="co.qwan.home.security.CustomLoginSuccessHandler" />
 	
 	<security:http>
 		<!-- 접근 권한별 url 제한 설정 -->
@@ -16,7 +17,10 @@
 		<!-- <security:access-denied-handler error-page="/accessError" /> -->
 		<security:access-denied-handler ref="customAccessDenied" />
 		
-		<security:form-login login-page="/customLogin"/>
+		<security:form-login login-page="/customLogin" 
+			authentication-success-handler-ref="customLoginSuccess" />
+			
+		<!-- <security:csrf disabled="true"/> -->
 		
 	</security:http>
 	<security:authentication-manager>
