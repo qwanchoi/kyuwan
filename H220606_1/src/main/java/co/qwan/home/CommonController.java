@@ -28,4 +28,9 @@ public class CommonController {
 		}
 	}
 	
+	@GetMapping("/customLogout")
+	public void logoutGet() {
+		System.out.println("*custom logout*");
+	}
+	
 }

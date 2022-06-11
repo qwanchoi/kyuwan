@@ -7,8 +7,9 @@
 	
 	<bean id="customAccessDenied" class="co.qwan.home.security.CustomAccessDeniedHandler" />
 	<bean id="customLoginSuccess" class="co.qwan.home.security.CustomLoginSuccessHandler" />
+	<bean id="customLogoutSuccess" class="co.qwan.home.security.CustomLogoutSuccessHandler" />
 	
-	<security:http>
+	<security:http auto-config="true" use-expressions="true">
 		<!-- 접근 권한별 url 제한 설정 -->
 		<security:intercept-url pattern="/sample/all" access="permitAll" />
 		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
@@ -19,7 +20,11 @@
 		
 		<security:form-login login-page="/customLogin" 
 			authentication-success-handler-ref="customLoginSuccess" />
-			
+		
+		<security:logout logout-url="/customLogout" invalidate-session="true" 
+			success-handler-ref="customLogoutSuccess" /> 
+			<!--  logout-success-url="/customLogin"  />  -->
+		
 		<!-- <security:csrf disabled="true"/> -->
 		
 	</security:http>

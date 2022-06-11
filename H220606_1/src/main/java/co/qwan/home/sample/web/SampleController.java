@@ -15,11 +15,11 @@ public class SampleController {
 	
 	@GetMapping("/member")
 	public void doMemeber() {
-		System.out.println("logined mamber...");
+		System.out.println("*logined mamber...");
 	}
 	
 	@GetMapping("/admin")
 	public void doAdmin() {
-		System.out.println("admin only...");
+		System.out.println("*admin only...");
 	}
 }
