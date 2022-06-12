@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.qwan.home.student.dao.StudentMapper">
+	
+	<resultMap type="co.qwan.home.student.vo.StudentVO" 
+		id="studentMap">
+		<id property="username" column="s_username" />
+		<result property="password" column="s_password"	/>
+		<result property="name" column="s_name" />
+		<result property="enabled" column="s_enabled" />
+		<result property="phone" column="s_phone" />
+		<result property="joindate" column="s_joindate" />
+		<result property="lastlogin" column="s_lastlogin" />
+		<collection property="authList" resultMap="authMap" />
+	</resultMap>
+	
+	<resultMap type="co.qwan.home.student.vo.AuthVO"
+		id="authMap">
+		<result property="username" column="username" />
+		<result property="rolename" column="rolename" />
+	</resultMap>	
+	<select id="getList" resultMap="studentMap">
+		SELECT s.*, sr.rolename
+		FROM student_main s 
+		JOIN student_role sr ON (s.s_username = sr.username) 
+	</select>
+	<select id="getOne" resultMap="studentMap" >
+		SELECT s.*, sr.rolename
+		FROM student_main s 
+		JOIN student_role sr ON (s.s_username = sr.username) 
+		WHERE s.s_username = #{username}
+	</select>
+</mapper>
