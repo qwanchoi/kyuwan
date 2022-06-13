@@ -10,6 +10,8 @@
 	<bean id="customLogoutSuccess" class="co.qwan.home.security.CustomLogoutSuccessHandler" />
 	<bean id="customPasswordEncoder" class="co.qwan.home.security.CustomPasswordEncoder" />
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="customUserDetailsService" class ="co.qwan.home.security.CustomUserDetailsService"/>
+	
 	<security:http auto-config="true" use-expressions="true">
 		<!-- 접근 권한별 url 제한 설정 -->
 		<security:intercept-url pattern="/sample/all" access="permitAll" />
@@ -30,15 +32,15 @@
 	</security:http>
 	<security:authentication-manager>
 		<!-- UserDetailsService 를 이용해 실제 인증과 권한 처리 -->
-		<security:authentication-provider>
+		<security:authentication-provider user-service-ref="customUserDetailsService">
 			<!-- <security:user-service> -->
 				<!-- PasswordEncoder 가 필요하지만 {noop} 으로 무시가능 -->
 				<!--  <security:user name="member" password="{noop}member" authorities="ROLE_MEMBER" />
 				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN" /> -->
 			<!-- </security:user-service> -->
-			<security:jdbc-user-service data-source-ref="dataSource" 
+			<!-- <security:jdbc-user-service data-source-ref="dataSource" 
 				users-by-username-query="SELECT s_username, s_password, s_enabled FROM student_main WHERE s_username = ? "
-				authorities-by-username-query="SELECT username, rolename FROM student_role WHERE username = ? " />
+				authorities-by-username-query="SELECT username, rolename FROM student_role WHERE username = ? " />  -->
 			<security:password-encoder ref="customPasswordEncoder"/>
 			
 		</security:authentication-provider>
